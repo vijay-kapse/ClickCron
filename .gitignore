@@ -4,6 +4,9 @@ coverage/
 .playwright/
 playwright-report/
 test-results/
+.clickcron/storage/
+.clickcron/runs/
+.clickcron/screenshots/
 .env
 .env.*
 *.log
