@@ -8,16 +8,23 @@ import { registerScheduleCommand } from '../commands/schedule.js';
 import { registerListCommand } from '../commands/list.js';
 import { registerRunCommand } from '../commands/run.js';
 import { registerDoctorCommand } from '../commands/doctor.js';
+import { execa } from '../core/process.js';
+
+vi.mock('../core/process.js', () => ({
+  execa: vi.fn()
+}));
 
 describe('integration-style CLI command behavior', () => {
   const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
   const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
   const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+  const execaMock = vi.mocked(execa);
 
   afterEach(() => {
     logSpy.mockClear();
     errSpy.mockClear();
     warnSpy.mockClear();
+    execaMock.mockReset();
     process.exitCode = undefined;
   });
 
@@ -75,9 +82,16 @@ describe('integration-style CLI command behavior', () => {
   });
 
   it('doctor warns when playwright browser dependency is missing', async () => {
+    execaMock.mockResolvedValueOnce({
+      stdout: '',
+      stderr: 'playwright not found',
+      exitCode: 1
+    });
+
     const program = new Command();
     registerDoctorCommand(program);
     await program.parseAsync(['node', 'test', 'doctor']);
-    expect(logSpy.mock.calls.flat().join('\n') + warnSpy.mock.calls.flat().join('\n')).toMatch(/doctor:/i);
+
+    expect(warnSpy.mock.calls.flat().join('\n')).toContain('Playwright browsers appear missing');
   });
 });

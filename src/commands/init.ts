@@ -31,7 +31,7 @@ export function registerInitCommand(program: Command): void {
         throw new Error(`Config already exists at ${configPath}. Use --force to overwrite.`);
       }
 
-      const config = await initializeConfig(cwd);
+      await initializeConfig(cwd);
       console.log(`Initialized ClickCron at ${cwd}`);
       console.log(`Created ${configPath}`);
     });

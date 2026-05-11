@@ -17,6 +17,6 @@ export function resolveDefaultPaths(projectDir: string): ClickCronPaths {
     automations: path.join(projectDir, 'automations'),
     runs: path.join(projectDir, INTERNAL_DIR_NAME, 'runs'),
     screenshots: path.join(projectDir, INTERNAL_DIR_NAME, 'screenshots'),
-    storage: path.join(projectDir, INTERNAL_DIR_NAME, 'storage'),
+    storage: path.join(projectDir, INTERNAL_DIR_NAME, 'storage')
   };
 }

@@ -7,6 +7,14 @@ export default [
   {
     ignores: ['dist/**', 'node_modules/**', 'coverage/**']
   },
+  {
+    languageOptions: {
+      globals: {
+        console: 'readonly',
+        process: 'readonly'
+      }
+    }
+  },
   js.configs.recommended,
   {
     files: ['**/*.ts'],
@@ -22,10 +30,8 @@ export default [
     },
     rules: {
       ...plugin.configs['recommended-type-checked'].rules,
-      '@typescript-eslint/consistent-type-imports': [
-        'error',
-        { prefer: 'type-imports' }
-      ]
+      'no-undef': 'off',
+      '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }]
     }
   },
   eslintConfigPrettier

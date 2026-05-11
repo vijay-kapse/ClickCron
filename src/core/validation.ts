@@ -10,12 +10,11 @@ export const automationNameSchema = z
 export const urlSchema = z.string().url('A valid URL is required.');
 
 const cronSegment = '(\\*|\\?|(?:[0-5]?\\d)(?:-[0-5]?\\d)?(?:/(?:[1-5]?\\d))?)';
-const cronRegex = new RegExp(`^${cronSegment}\\s+${cronSegment}\\s+${cronSegment}\\s+${cronSegment}\\s+${cronSegment}$`);
+const cronRegex = new RegExp(
+  `^${cronSegment}\\s+${cronSegment}\\s+${cronSegment}\\s+${cronSegment}\\s+${cronSegment}$`
+);
 
-export const cronSchema = z
-  .string()
-  .trim()
-  .regex(cronRegex, 'Cron must contain 5 valid segments.');
+export const cronSchema = z.string().trim().regex(cronRegex, 'Cron must contain 5 valid segments.');
 
 export function validateAutomationName(name: string): string {
   return automationNameSchema.parse(name);
