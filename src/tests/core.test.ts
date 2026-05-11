@@ -7,6 +7,8 @@ import { readAutomationMetadata, writeAutomationMetadata } from '../core/automat
 import { resolveCronExpression, createScheduleWorkflow } from '../core/scheduler.js';
 import { validateAutomationName } from '../core/validation.js';
 import { CliError, toCliError } from '../core/errors.js';
+import { renderGithubActionTemplate } from '../templates/github-action.js';
+import { renderLocalCronTemplate } from '../templates/local-cron.js';
 
 describe('config validation/default generation', () => {
   it('creates default config rooted in cwd', () => {
@@ -40,10 +42,19 @@ describe('workflow generation snapshot', () => {
     const cwd = await mkdtemp(path.join(os.tmpdir(), 'clickcron-workflow-'));
     const result = await createScheduleWorkflow(
       { name: 'My Monitor', aliasOrCron: 'weekly', cwd },
-      ({ name, cron }) => `name:${name}\ncron:${cron}\n`,
+      ({ name, cron }) => `name:${name}\ncron:${cron}\n`
     );
     const content = await readFile(result.workflowPath, 'utf8');
     expect(content).toMatchInlineSnapshot(`"name:my-monitor\ncron:0 9 * * 1\n"`);
+  });
+
+  it('renders runnable schedule commands', () => {
+    const params = { name: 'price-checker', cron: '0 9 * * *' };
+
+    expect(renderGithubActionTemplate(params)).toContain('npx clickcron run price-checker');
+    expect(renderLocalCronTemplate(params)).toContain('npx clickcron run price-checker');
+    expect(renderGithubActionTemplate(params)).not.toContain('--headless');
+    expect(renderLocalCronTemplate(params)).not.toContain('--headless');
   });
 });
 
@@ -55,7 +66,7 @@ describe('metadata IO', () => {
       name: 'Price Checker',
       browser: 'chromium',
       timeoutMs: 10000,
-      sourceUrl: 'https://example.com',
+      sourceUrl: 'https://example.com'
     });
     const read = await readAutomationMetadata(created.metadataPath);
     expect(read.name).toBe('price-checker');

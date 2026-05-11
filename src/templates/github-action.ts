@@ -32,7 +32,7 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run ClickCron automation
-        run: npx clickcron run ${params.name} --headless
+        run: npx clickcron run ${params.name}
 
       - name: Upload run artifacts
         if: always()

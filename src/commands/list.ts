@@ -27,7 +27,14 @@ export function registerListCommand(program: Command): void {
           return;
         }
 
-        console.table(automations.map((a) => ({ name: a.name, browser: a.browser, updatedAt: a.updatedAt, sourceUrl: a.sourceUrl ?? '-' })));
+        console.table(
+          automations.map((a) => ({
+            name: a.name,
+            browser: a.browser,
+            updatedAt: a.updatedAt,
+            sourceUrl: a.sourceUrl ?? '-'
+          }))
+        );
       } catch (error) {
         logError(error);
         process.exitCode = 1;

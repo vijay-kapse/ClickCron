@@ -1,82 +1,136 @@
-# ClickCron — Record once. Run forever.
+# ClickCron
 
-A developer-friendly CLI for browser automations you can schedule and trust.
+Record once. Run forever.
 
-## Demo
+[![CI](https://github.com/vijay-kapse/ClickCron/actions/workflows/ci.yml/badge.svg)](https://github.com/vijay-kapse/ClickCron/actions/workflows/ci.yml)
+![Node](https://img.shields.io/badge/node-%3E%3D20-111318)
+![TypeScript](https://img.shields.io/badge/TypeScript-ready-3178c6)
+![License](https://img.shields.io/badge/license-MIT-0bbf87)
 
-> Demo GIF / video placeholder: `docs/demo.md`.
+ClickCron is a TypeScript CLI for turning browser clicks into scheduled Playwright checks. Record a flow, run it locally or in CI, and keep logs, screenshots, and JSON results for every run.
 
-## Why
+<p align="center">
+  <img src="./docs/assets/clickcron-hero.png" alt="ClickCron CLI demo showing record, run, and schedule workflow" width="100%">
+</p>
 
-ClickCron helps you turn fragile manual checks into repeatable browser automations with a simple CLI workflow:
+<p align="center">
+  <a href="./docs/assets/clickcron-demo.webm"><strong>Watch the short demo video</strong></a>
+</p>
 
-- Record and store automation metadata.
-- Run checks locally or in CI.
-- Generate schedule-ready GitHub Actions workflows.
-- Keep artifacts and logs for debugging.
+## Why It Exists
+
+Manual browser checks are easy to forget and annoying to repeat. ClickCron gives developers a tiny, repo-friendly workflow for checks like:
+
+- price, inventory, and content monitoring
+- form smoke tests
+- screenshot-based sanity checks
+- job board, dashboard, and internal tool checks
+- scheduled browser automations that should leave audit-ready artifacts
 
 ## Quickstart
 
 ```bash
-npm install
+git clone https://github.com/vijay-kapse/ClickCron.git
+cd ClickCron
+npm ci
 npm run build
-npx clickcron init
+node dist/cli.js init
+```
+
+During development, run commands without rebuilding:
+
+```bash
+npm run dev -- --help
+npm run dev -- init
+npm run dev -- doctor --verbose
+npm run dev -- list
+```
+
+After publishing or linking the package, use the CLI directly:
+
+```bash
+clickcron init
+clickcron record price-checker https://example.com
+clickcron schedule price-checker daily
+clickcron run price-checker
 ```
 
 ## Commands
 
-- `clickcron init [--cwd <path>] [--force]`
-- `clickcron record <name> <url> [options]`
-- `clickcron run <name> [--dry-run] [--env <name>]`
-- `clickcron list [--json]`
-- `clickcron schedule <name> <alias-or-cron> [--timezone <tz>] [--force]`
-- `clickcron doctor [--verbose]`
-- `clickcron remove <name> [--runs]`
-- `clickcron export <name> [--format json|yaml]`
-
-## Examples
-
-- `examples/price-checker/README.md`
-- `examples/screenshot-monitor/README.md`
-- `examples/form-checker/README.md`
-- `examples/job-board-monitor/README.md`
+```bash
+clickcron init [--cwd <path>] [--force]
+clickcron record <name> <url> [--browser chromium|firefox|webkit]
+clickcron run <name> [--dry-run] [--env <name>]
+clickcron list [--json]
+clickcron schedule <name> <alias-or-cron> [--timezone <tz>] [--force]
+clickcron doctor [--verbose]
+clickcron remove <name> [--runs]
+clickcron export <name> [--format json|yaml]
+```
 
 ## Scheduling
 
-Use schedule aliases (`hourly`, `daily`, `weekly`, `monthly`) or provide a raw 5-field cron expression.
+Use schedule aliases or a raw 5-field cron expression:
 
 ```bash
-npx clickcron schedule price-checker daily
+clickcron schedule price-checker hourly
+clickcron schedule price-checker "0 9 * * *"
 ```
 
-This writes a workflow file under `.github/workflows/` and prints a local-cron template.
+ClickCron writes a GitHub Actions workflow and prints a local-cron template so you can choose the runtime that fits your project.
 
-## Secrets
+## Artifacts
 
-Security guidance:
+Each run is designed to leave a trail:
 
-- Use environment variables for local secrets (e.g. via `.env` + process env injection).
-- Use GitHub Actions Secrets for CI/CD credentials and tokens.
-- Never hardcode credentials in scripts, metadata files, workflows, or committed fixtures.
-- Safe-use boundary: only automate pages and accounts you own or are explicitly authorized to test.
+- execution log
+- structured `result.json`
+- screenshots directory
+- schedule workflow for CI runs
 
-See `docs/secrets.md` for policy details.
+That makes failures easier to debug and easier to share.
 
-## Troubleshooting
+## Repo Scripts
 
-- Run `npx clickcron doctor --verbose` to verify environment readiness.
-- If Playwright browsers are missing, run `npx playwright install --with-deps`.
-- Validate your schedule expression and recipe names before committing workflow files.
+```bash
+npm run typecheck
+npm run lint
+npm test
+npm run build
+npm run verify
+npm run assets
+```
 
-More: `docs/troubleshooting.md`.
+`npm run assets` regenerates the README hero image and demo WebM in `docs/assets/`.
+
+## Safety
+
+Only automate pages and accounts you own or are explicitly authorized to test. Keep secrets in environment variables locally and in GitHub Actions Secrets in CI. Do not commit credentials, tokens, session cookies, or generated storage state.
+
+More detail: [docs/secrets.md](./docs/secrets.md).
+
+## Examples
+
+- [Price checker](./examples/price-checker/README.md)
+- [Screenshot monitor](./examples/screenshot-monitor/README.md)
+- [Form checker](./examples/form-checker/README.md)
+- [Job board monitor](./examples/job-board-monitor/README.md)
+
+## Launch Kit
+
+Planning to share it? Use:
+
+- Hero image: [docs/assets/clickcron-hero.png](./docs/assets/clickcron-hero.png)
+- Demo video: [docs/assets/clickcron-demo.webm](./docs/assets/clickcron-demo.webm)
+- LinkedIn copy: [docs/linkedin-launch-post.md](./docs/linkedin-launch-post.md)
 
 ## Roadmap
 
-- Better schedule previews and next-run simulation.
-- First-class secret profile management.
-- Richer run history queries and artifact filtering.
-- Optional hosted dashboard integrations.
+- next-run previews for schedules
+- richer run history queries
+- secret profile helpers
+- optional hosted dashboard integrations
 
 ## Contributing
 
-Contributions are welcome. Please open issues for bugs/ideas and submit PRs with tests and docs updates.
+Issues and PRs are welcome. Please run `npm run verify` before opening a PR.

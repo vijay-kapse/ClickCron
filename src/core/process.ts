@@ -6,9 +6,15 @@ export interface ProcessResult {
   exitCode: number | null;
 }
 
-export async function execa(command: string, args: string[], options?: { stdio?: 'inherit'; reject?: boolean }): Promise<ProcessResult> {
+export async function execa(
+  command: string,
+  args: string[],
+  options?: { stdio?: 'inherit'; reject?: boolean }
+): Promise<ProcessResult> {
   return new Promise((resolve, reject) => {
-    const child = spawn(command, args, { stdio: options?.stdio === 'inherit' ? 'inherit' : 'pipe' });
+    const child = spawn(command, args, {
+      stdio: options?.stdio === 'inherit' ? 'inherit' : 'pipe'
+    });
 
     let stdout = '';
     let stderr = '';

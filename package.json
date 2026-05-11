@@ -4,6 +4,24 @@
   "description": "A TypeScript-based CLI for click-driven monitoring and scheduled checks.",
   "license": "MIT",
   "type": "module",
+  "author": "Vijay Kapse",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vijay-kapse/ClickCron.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vijay-kapse/ClickCron/issues"
+  },
+  "homepage": "https://github.com/vijay-kapse/ClickCron#readme",
+  "keywords": [
+    "browser-automation",
+    "cron",
+    "monitoring",
+    "playwright",
+    "cli",
+    "github-actions",
+    "typescript"
+  ],
   "bin": {
     "clickcron": "dist/cli.js"
   },
@@ -16,10 +34,15 @@
     "test": "vitest run",
     "lint": "eslint .",
     "format": "prettier --check .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "verify": "npm run typecheck && npm run lint && npm test && npm run build",
+    "assets": "node scripts/render-readme-assets.mjs",
+    "prepack": "npm run build"
   },
   "files": [
     "dist",
+    "docs",
+    "examples",
     "README.md",
     "LICENSE"
   ],

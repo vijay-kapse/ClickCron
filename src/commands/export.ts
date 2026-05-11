@@ -12,6 +12,8 @@ export function registerExportCommand(program: Command): void {
     .option('--format <type>', 'Output format: json or yaml.', 'json')
     .option('-o, --output <file>', 'Write export payload to a specific file path.')
     .action((name: string, options: ExportOptions) => {
-      console.log(`export: ${name} [format=${options.format ?? 'json'}${options.output ? `, output=${options.output}` : ''}]`);
+      console.log(
+        `export: ${name} [format=${options.format ?? 'json'}${options.output ? `, output=${options.output}` : ''}]`
+      );
     });
 }

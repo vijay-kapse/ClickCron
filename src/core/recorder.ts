@@ -15,7 +15,10 @@ function supportsOutputFlag(helpText: string): boolean {
   return helpText.includes('--output');
 }
 
-export async function recordAutomation(config: ClickCronConfig, options: RecordAutomationOptions): Promise<void> {
+export async function recordAutomation(
+  config: ClickCronConfig,
+  options: RecordAutomationOptions
+): Promise<void> {
   const { scriptPath } = getAutomationPaths(config, options.name);
   const help = await execa('npx', ['playwright', 'codegen', '--help']);
   const hasOutput = supportsOutputFlag(help.stdout);
@@ -24,7 +27,7 @@ export async function recordAutomation(config: ClickCronConfig, options: RecordA
     name: options.name,
     browser: options.browser,
     timeoutMs: options.timeoutMs,
-    sourceUrl: options.url,
+    ...(options.url !== undefined ? { sourceUrl: options.url } : {})
   });
 
   if (hasOutput) {
@@ -37,5 +40,7 @@ export async function recordAutomation(config: ClickCronConfig, options: RecordA
   const placeholder = `import { test } from '@playwright/test';\n\ntest('recorded flow placeholder', async ({ page }) => {\n  // Your Playwright installation does not support --output for codegen.\n  // Run: npx playwright codegen ${options.url ?? '<url>'}\n  // Then paste generated script into this file.\n  await page.goto('${options.url ?? 'https://example.com'}');\n});\n`;
 
   await writeFile(scriptPath, placeholder, 'utf8');
-  throw new CliError(`Your Playwright codegen does not support --output. Placeholder created at ${scriptPath}.`);
+  throw new CliError(
+    `Your Playwright codegen does not support --output. Placeholder created at ${scriptPath}.`
+  );
 }

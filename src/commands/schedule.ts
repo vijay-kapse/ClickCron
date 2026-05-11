@@ -1,8 +1,5 @@
 import type { Command } from 'commander';
-import {
-  createScheduleWorkflow,
-  resolveCronExpression,
-} from '../core/scheduler.js';
+import { createScheduleWorkflow, resolveCronExpression } from '../core/scheduler.js';
 import { renderGithubActionTemplate } from '../templates/github-action.js';
 import { renderLocalCronTemplate } from '../templates/local-cron.js';
 
@@ -25,11 +22,13 @@ export function registerScheduleCommand(program: Command): void {
 
       const result = await createScheduleWorkflow(
         { name, aliasOrCron: cron, force },
-        renderGithubActionTemplate,
+        renderGithubActionTemplate
       );
 
       console.log(`✅ Schedule saved for "${result.name}" (${result.cron}).`);
-      console.log(`📄 Workflow written to ${result.workflowPath}${result.overwritten ? ' (overwritten)' : ''}.`);
+      console.log(
+        `📄 Workflow written to ${result.workflowPath}${result.overwritten ? ' (overwritten)' : ''}.`
+      );
       console.log('');
       console.log('Local cron (manual setup):');
       console.log(renderLocalCronTemplate({ name: result.name, cron: result.cron }));

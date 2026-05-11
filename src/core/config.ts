@@ -1,11 +1,7 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { z } from 'zod';
 import type { ClickCronConfig } from '../types/config.js';
-import {
-  resolveConfigFilePath,
-  resolveDefaultPaths,
-  resolveProjectRoot,
-} from './paths.js';
+import { resolveConfigFilePath, resolveDefaultPaths, resolveProjectRoot } from './paths.js';
 
 const clickCronConfigSchema = z.object({
   version: z.number().int().positive(),
@@ -16,8 +12,8 @@ const clickCronConfigSchema = z.object({
     automations: z.string().min(1),
     runs: z.string().min(1),
     screenshots: z.string().min(1),
-    storage: z.string().min(1),
-  }),
+    storage: z.string().min(1)
+  })
 });
 
 export type ClickCronConfigInput = z.input<typeof clickCronConfigSchema>;
@@ -30,7 +26,7 @@ export function createDefaultConfig(cwd?: string): ClickCronConfig {
     defaultBrowser: 'chromium',
     headless: true,
     timeoutMs: 30000,
-    paths: resolveDefaultPaths(projectDir),
+    paths: resolveDefaultPaths(projectDir)
   };
 }
 

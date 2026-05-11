@@ -16,7 +16,15 @@ export async function runAutomation(config: ClickCronConfig, name: string): Prom
   await mkdir(runDir, { recursive: true });
   await mkdir(screenshotDir, { recursive: true });
 
-  const command = ['playwright', 'test', automation.scriptPath, '--screenshot', 'on', '--output', runDir];
+  const command = [
+    'playwright',
+    'test',
+    automation.scriptPath,
+    '--screenshot',
+    'on',
+    '--output',
+    runDir
+  ];
   const result = await execa('npx', command, { reject: false });
 
   const finishedAt = new Date();
@@ -31,7 +39,7 @@ export async function runAutomation(config: ClickCronConfig, name: string): Prom
     runDir,
     logPath: path.join(runDir, 'execution.log'),
     resultPath: path.join(runDir, 'result.json'),
-    screenshotPath,
+    screenshotPath
   };
 
   await writeFile(runResult.logPath, `${result.stdout}\n${result.stderr}\n`, 'utf8');

@@ -8,15 +8,21 @@ function slugify(name: string): string {
   return name.trim().toLowerCase().replace(/\s+/g, '-');
 }
 
-export function getAutomationPaths(config: ClickCronConfig, name: string): { scriptPath: string; metadataPath: string } {
+export function getAutomationPaths(
+  config: ClickCronConfig,
+  name: string
+): { scriptPath: string; metadataPath: string } {
   const slug = slugify(name);
   return {
     scriptPath: path.join(config.paths.automations, `${slug}.spec.ts`),
-    metadataPath: path.join(config.paths.automations, `${slug}.clickcron.json`),
+    metadataPath: path.join(config.paths.automations, `${slug}.clickcron.json`)
   };
 }
 
-export async function writeAutomationMetadata(config: ClickCronConfig, input: CreateAutomationInput): Promise<AutomationMetadata> {
+export async function writeAutomationMetadata(
+  config: ClickCronConfig,
+  input: CreateAutomationInput
+): Promise<AutomationMetadata> {
   const { scriptPath, metadataPath } = getAutomationPaths(config, input.name);
   const now = new Date().toISOString();
   const metadata: AutomationMetadata = {
@@ -26,10 +32,10 @@ export async function writeAutomationMetadata(config: ClickCronConfig, input: Cr
     metadataPath,
     createdAt: now,
     updatedAt: now,
-    sourceUrl: input.sourceUrl,
     browser: input.browser,
-    timeoutMs: input.timeoutMs,
+    timeoutMs: input.timeoutMs
   };
+  if (input.sourceUrl !== undefined) metadata.sourceUrl = input.sourceUrl;
 
   await mkdir(config.paths.automations, { recursive: true });
   await writeFile(metadataPath, `${JSON.stringify(metadata, null, 2)}\n`, 'utf8');
@@ -45,11 +51,16 @@ export async function discoverAutomations(config: ClickCronConfig): Promise<Auto
   await mkdir(config.paths.automations, { recursive: true });
   const entries = await readdir(config.paths.automations);
   const metadataFiles = entries.filter((entry) => entry.endsWith('.clickcron.json'));
-  const automations = await Promise.all(metadataFiles.map((file) => readAutomationMetadata(path.join(config.paths.automations, file))));
+  const automations = await Promise.all(
+    metadataFiles.map((file) => readAutomationMetadata(path.join(config.paths.automations, file)))
+  );
   return automations.sort((a, b) => a.name.localeCompare(b.name));
 }
 
-export async function getAutomationByName(config: ClickCronConfig, name: string): Promise<AutomationMetadata> {
+export async function getAutomationByName(
+  config: ClickCronConfig,
+  name: string
+): Promise<AutomationMetadata> {
   const { metadataPath } = getAutomationPaths(config, name);
   try {
     return await readAutomationMetadata(metadataPath);
@@ -58,7 +69,11 @@ export async function getAutomationByName(config: ClickCronConfig, name: string)
   }
 }
 
-export async function removeAutomation(config: ClickCronConfig, name: string, removeRunHistory: boolean): Promise<void> {
+export async function removeAutomation(
+  config: ClickCronConfig,
+  name: string,
+  removeRunHistory: boolean
+): Promise<void> {
   const { metadataPath, scriptPath } = getAutomationPaths(config, name);
   await rm(metadataPath, { force: true });
   await rm(scriptPath, { force: true });
