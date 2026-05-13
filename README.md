@@ -13,10 +13,6 @@ ClickCron is a TypeScript CLI for turning browser clicks into scheduled Playwrig
   <img src="./docs/assets/clickcron-hero.png" alt="ClickCron CLI demo showing record, run, and schedule workflow" width="100%">
 </p>
 
-<p align="center">
-  <a href="./docs/assets/clickcron-demo.webm"><strong>Watch the short demo video</strong></a>
-</p>
-
 ## Why It Exists
 
 Manual browser checks are easy to forget and annoying to repeat. ClickCron gives developers a tiny, repo-friendly workflow for checks like:
@@ -101,7 +97,7 @@ npm run verify
 npm run assets
 ```
 
-`npm run assets` regenerates the README hero image and demo WebM in `docs/assets/`.
+`npm run assets` regenerates the README screenshots in `docs/assets/`.
 
 ## Safety
 
@@ -116,12 +112,16 @@ More detail: [docs/secrets.md](./docs/secrets.md).
 - [Form checker](./examples/form-checker/README.md)
 - [Job board monitor](./examples/job-board-monitor/README.md)
 
+<p align="center">
+  <img src="./docs/assets/clickcron-examples.png" alt="ClickCron example recipes for price checks, screenshot monitors, form checks, and job boards" width="100%">
+</p>
+
 ## Launch Kit
 
 Planning to share it? Use:
 
-- Hero image: [docs/assets/clickcron-hero.png](./docs/assets/clickcron-hero.png)
-- Demo video: [docs/assets/clickcron-demo.webm](./docs/assets/clickcron-demo.webm)
+- Hero screenshot: [docs/assets/clickcron-hero.png](./docs/assets/clickcron-hero.png)
+- Examples screenshot: [docs/assets/clickcron-examples.png](./docs/assets/clickcron-examples.png)
 - LinkedIn copy: [docs/linkedin-launch-post.md](./docs/linkedin-launch-post.md)
 
 ## Roadmap

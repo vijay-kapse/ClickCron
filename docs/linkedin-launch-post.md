@@ -13,7 +13,10 @@ Useful for price checks, form smoke tests, screenshot monitors, job-board checks
 
 Repo: https://github.com/vijay-kapse/ClickCron
 
-Demo video: https://github.com/vijay-kapse/ClickCron/blob/main/docs/assets/clickcron-demo.webm
+Launch screenshots:
+
+- https://github.com/vijay-kapse/ClickCron/blob/main/docs/assets/clickcron-hero.png
+- https://github.com/vijay-kapse/ClickCron/blob/main/docs/assets/clickcron-examples.png
 
 Would love feedback from folks who automate browser checks, QA workflows, or reliability monitoring.
 
