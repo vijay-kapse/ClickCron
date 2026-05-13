@@ -116,13 +116,6 @@ More detail: [docs/secrets.md](./docs/secrets.md).
   <img src="./docs/assets/clickcron-examples.png" alt="ClickCron example recipes for price checks, screenshot monitors, form checks, and job boards" width="100%">
 </p>
 
-## Launch Kit
-
-Planning to share it? Use:
-
-- Hero screenshot: [docs/assets/clickcron-hero.png](./docs/assets/clickcron-hero.png)
-- Examples screenshot: [docs/assets/clickcron-examples.png](./docs/assets/clickcron-examples.png)
-- LinkedIn copy: [docs/linkedin-launch-post.md](./docs/linkedin-launch-post.md)
 
 ## Roadmap
 
