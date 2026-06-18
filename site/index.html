@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ClickCron — Record once. Run forever.</title>
+<meta name="description" content="ClickCron is a TypeScript CLI that turns browser clicks into scheduled Playwright checks. Record a flow, run it locally or in CI, and keep logs, screenshots, and JSON results for every run." />
+<meta property="og:title" content="ClickCron — Record once. Run forever." />
+<meta property="og:description" content="Turn browser clicks into scheduled Playwright checks. Record a flow, run it anywhere, keep audit-ready artifacts." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="./assets/clickcron-hero.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⏱️</text></svg>" />
+<style>
+  :root {
+    --bg: #0a0c0f;
+    --bg-soft: #0f1216;
+    --card: #14181d;
+    --card-2: #181d23;
+    --border: #232a31;
+    --text: #e8edf2;
+    --muted: #95a1ad;
+    --accent: #0bbf87;
+    --accent-2: #14e3a3;
+    --code-bg: #0c0f13;
+    --shadow: 0 24px 60px -20px rgba(0,0,0,.6);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  .mono { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; }
+
+  /* Nav */
+  header.nav {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(12px);
+    background: rgba(10,12,15,.72);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -.01em; }
+  .brand .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 16px var(--accent); }
+  .nav-links { display: flex; align-items: center; gap: 26px; font-size: 14px; color: var(--muted); }
+  .nav-links a:hover { color: var(--text); }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 18px; border-radius: 10px; font-weight: 600; font-size: 14px;
+    transition: transform .15s ease, background .15s ease, border-color .15s ease;
+  }
+  .btn-primary { background: var(--accent); color: #04130d; }
+  .btn-primary:hover { background: var(--accent-2); transform: translateY(-1px); }
+  .btn-ghost { border: 1px solid var(--border); color: var(--text); }
+  .btn-ghost:hover { border-color: var(--accent); transform: translateY(-1px); }
+
+  /* Hero */
+  .hero { position: relative; padding: 96px 0 72px; overflow: hidden; }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background:
+      radial-gradient(700px 340px at 15% -10%, rgba(11,191,135,.18), transparent 60%),
+      radial-gradient(600px 300px at 100% 0%, rgba(20,227,163,.10), transparent 55%);
+    pointer-events: none;
+  }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--accent-2); font-weight: 600;
+    border: 1px solid var(--border); border-radius: 999px; padding: 6px 14px;
+    background: rgba(11,191,135,.06);
+  }
+  h1 {
+    font-size: clamp(40px, 7vw, 76px); line-height: 1.02; letter-spacing: -.03em;
+    margin: 22px 0 0; font-weight: 800;
+  }
+  h1 .grad { background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lede { font-size: clamp(17px, 2.4vw, 21px); color: var(--muted); max-width: 620px; margin: 22px 0 0; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+  .pillset { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+  .pill { font-size: 13px; color: var(--muted); border: 1px solid var(--border); border-radius: 8px; padding: 7px 12px; background: var(--bg-soft); }
+  .pill b { color: var(--accent); font-weight: 600; }
+
+  .hero-img { margin-top: 56px; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); }
+  .hero-img img { display: block; width: 100%; height: auto; }
+
+  /* Sections */
+  section { padding: 76px 0; }
+  .section-head { max-width: 640px; }
+  .kicker { color: var(--accent); font-weight: 600; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; }
+  h2 { font-size: clamp(28px, 4vw, 40px); letter-spacing: -.02em; margin: 12px 0 0; font-weight: 800; }
+  .section-head p { color: var(--muted); font-size: 17px; margin-top: 14px; }
+
+  .grid { display: grid; gap: 18px; margin-top: 44px; }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .card {
+    background: linear-gradient(180deg, var(--card), var(--card-2));
+    border: 1px solid var(--border); border-radius: 14px; padding: 24px;
+    transition: transform .18s ease, border-color .18s ease;
+  }
+  .card:hover { transform: translateY(-3px); border-color: rgba(11,191,135,.5); }
+  .card .ico { width: 38px; height: 38px; border-radius: 9px; display: grid; place-items: center; background: rgba(11,191,135,.12); color: var(--accent); font-size: 19px; margin-bottom: 14px; }
+  .card h3 { margin: 0 0 6px; font-size: 18px; }
+  .card p { margin: 0; color: var(--muted); font-size: 15px; }
+
+  /* Steps */
+  .steps { counter-reset: step; }
+  .step { display: flex; gap: 18px; align-items: flex-start; }
+  .step-num {
+    flex: none; width: 34px; height: 34px; border-radius: 50%;
+    display: grid; place-items: center; font-weight: 700; font-size: 14px;
+    background: rgba(11,191,135,.12); color: var(--accent); border: 1px solid rgba(11,191,135,.3);
+  }
+
+  /* Terminal */
+  .terminal {
+    background: var(--code-bg); border: 1px solid var(--border); border-radius: 14px;
+    overflow: hidden; box-shadow: var(--shadow); margin-top: 44px;
+  }
+  .term-bar { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--border); background: #0a0d10; }
+  .term-bar .d { width: 12px; height: 12px; border-radius: 50%; }
+  .term-bar .d.r { background: #ff5f56; } .term-bar .d.y { background: #ffbd2e; } .term-bar .d.g { background: #27c93f; }
+  .term-bar .title { margin-left: 10px; font-size: 13px; color: var(--muted); }
+  .term-body { padding: 22px 24px; font-size: 14.5px; line-height: 1.9; overflow-x: auto; }
+  .term-body .ln { white-space: pre; }
+  .term-body .pr { color: var(--accent); }
+  .term-body .cmd { color: var(--text); }
+  .term-body .ok { color: #6ee7b7; }
+  .term-body .dim { color: var(--muted); }
+
+  /* Examples */
+  .examples-img { margin-top: 40px; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); }
+  .examples-img img { display: block; width: 100%; height: auto; }
+
+  /* CTA band */
+  .cta-band {
+    margin: 40px 0 0; border: 1px solid var(--border); border-radius: 18px; padding: 56px 40px;
+    text-align: center;
+    background:
+      radial-gradient(500px 200px at 50% -20%, rgba(11,191,135,.18), transparent 60%),
+      linear-gradient(180deg, var(--card), var(--card-2));
+  }
+  .cta-band h2 { margin-bottom: 10px; }
+  .cta-band p { color: var(--muted); max-width: 520px; margin: 0 auto 26px; }
+
+  /* Footer */
+  footer { border-top: 1px solid var(--border); padding: 40px 0; color: var(--muted); font-size: 14px; }
+  .foot-inner { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; }
+  .foot-links { display: flex; gap: 22px; }
+  .foot-links a:hover { color: var(--text); }
+
+  code.inline { background: var(--code-bg); border: 1px solid var(--border); border-radius: 6px; padding: 2px 7px; font-size: 13px; color: var(--accent-2); }
+
+  @media (max-width: 820px) {
+    .grid-3, .grid-2 { grid-template-columns: 1fr; }
+    .nav-links a:not(.btn) { display: none; }
+    .hero { padding: 64px 0 48px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top"><span class="dot"></span> ClickCron</a>
+    <nav class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#features">Features</a>
+      <a href="#commands">Commands</a>
+      <a href="#examples">Examples</a>
+      <a class="btn btn-ghost" href="https://github.com/vijay-kapse/ClickCron" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow"><span class="dot" style="width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block"></span> Playwright flows, scheduled like cron</span>
+      <h1>Record once.<br><span class="grad">Run forever.</span></h1>
+      <p class="lede">ClickCron is a TypeScript CLI that turns browser clicks into scheduled Playwright checks. Record a flow, run it locally or in CI, and keep logs, screenshots, and JSON results for every run.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="https://github.com/vijay-kapse/ClickCron" target="_blank" rel="noopener">★ Star on GitHub</a>
+        <a class="btn btn-ghost" href="#how">See how it works →</a>
+      </div>
+      <div class="pillset">
+        <span class="pill"><b>CLI-first</b> · no dashboard required</span>
+        <span class="pill"><b>GitHub Actions</b> ready</span>
+        <span class="pill"><b>Screenshots</b> + audit-ready logs</span>
+      </div>
+      <div class="hero-img">
+        <img src="./assets/clickcron-hero.png" alt="ClickCron CLI demo showing record, run, and schedule workflow" />
+      </div>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker">How it works</span>
+        <h2>From a browser click to a scheduled check in three steps</h2>
+        <p>Manual browser checks are easy to forget and annoying to repeat. ClickCron gives you a tiny, repo-friendly workflow instead.</p>
+      </div>
+      <div class="grid grid-3 steps">
+        <div class="card step">
+          <div class="step-num">1</div>
+          <div>
+            <h3>Record</h3>
+            <p>Capture a browser flow once with <code class="inline">clickcron record</code> and save it as a portable Playwright script in your repo.</p>
+          </div>
+        </div>
+        <div class="card step">
+          <div class="step-num">2</div>
+          <div>
+            <h3>Run</h3>
+            <p>Replay locally or in CI with <code class="inline">clickcron run</code>. Every run leaves logs, screenshots, and a structured <code class="inline">result.json</code>.</p>
+          </div>
+        </div>
+        <div class="card step">
+          <div class="step-num">3</div>
+          <div>
+            <h3>Schedule</h3>
+            <p>Pick an alias or raw cron with <code class="inline">clickcron schedule</code>. ClickCron writes a GitHub Actions workflow for you.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="terminal">
+        <div class="term-bar">
+          <span class="d r"></span><span class="d y"></span><span class="d g"></span>
+          <span class="title mono">clickcron demo</span>
+        </div>
+        <div class="term-body mono">
+<div class="ln"><span class="pr">$</span> <span class="cmd">clickcron init</span></div>
+<div class="ln"><span class="ok">[ok]</span> <span class="dim">Project ready · .clickcron/</span></div>
+<div class="ln"><span class="pr">$</span> <span class="cmd">clickcron record price-watch https://example.com</span></div>
+<div class="ln"><span class="ok">[ok]</span> <span class="dim">Saved Playwright script + metadata</span></div>
+<div class="ln"><span class="pr">$</span> <span class="cmd">clickcron schedule price-watch daily</span></div>
+<div class="ln"><span class="ok">[ok]</span> <span class="dim">Workflow ready for GitHub Actions</span></div>
+<div class="ln"><span class="pr">$</span> <span class="cmd">clickcron run price-watch</span></div>
+<div class="ln"><span class="ok">[ok]</span> <span class="dim">Pass · screenshot + result.json written</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" style="background:var(--bg-soft); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker">Why it exists</span>
+        <h2>Built for checks you should never have to babysit</h2>
+        <p>Tiny enough to live in any repo, structured enough to debug and share.</p>
+      </div>
+      <div class="grid grid-3">
+        <div class="card"><div class="ico">💲</div><h3>Price &amp; inventory</h3><p>Monitor prices, stock, and content changes on the pages you care about.</p></div>
+        <div class="card"><div class="ico">🧪</div><h3>Form smoke tests</h3><p>Make sure your sign-up and contact flows still work after every deploy.</p></div>
+        <div class="card"><div class="ico">📸</div><h3>Screenshot sanity</h3><p>Capture visual snapshots so regressions are obvious, not buried.</p></div>
+        <div class="card"><div class="ico">📋</div><h3>Dashboards &amp; tools</h3><p>Watch job boards, internal dashboards, and admin panels on a schedule.</p></div>
+        <div class="card"><div class="ico">🗂️</div><h3>Audit-ready artifacts</h3><p>Execution log, <code class="inline">result.json</code>, and screenshots for every single run.</p></div>
+        <div class="card"><div class="ico">⚙️</div><h3>CI-native</h3><p>Generates a GitHub Actions workflow plus a local-cron template — your choice.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="commands">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker">Commands</span>
+        <h2>One small CLI, the whole loop</h2>
+        <p>Record, run, list, schedule, and export — everything lives next to your code.</p>
+      </div>
+      <div class="terminal">
+        <div class="term-bar">
+          <span class="d r"></span><span class="d y"></span><span class="d g"></span>
+          <span class="title mono">clickcron --help</span>
+        </div>
+        <div class="term-body mono">
+<div class="ln"><span class="pr">$</span> <span class="cmd">clickcron init</span> <span class="dim">[--cwd &lt;path&gt;] [--force]</span></div>
+<div class="ln"><span class="pr">$</span> <span class="cmd">clickcron record</span> <span class="dim">&lt;name&gt; &lt;url&gt; [--browser chromium|firefox|webkit]</span></div>
+<div class="ln"><span class="pr">$</span> <span class="cmd">clickcron run</span> <span class="dim">&lt;name&gt; [--dry-run] [--env &lt;name&gt;]</span></div>
+<div class="ln"><span class="pr">$</span> <span class="cmd">clickcron list</span> <span class="dim">[--json]</span></div>
+<div class="ln"><span class="pr">$</span> <span class="cmd">clickcron schedule</span> <span class="dim">&lt;name&gt; &lt;alias-or-cron&gt; [--timezone &lt;tz&gt;] [--force]</span></div>
+<div class="ln"><span class="pr">$</span> <span class="cmd">clickcron doctor</span> <span class="dim">[--verbose]</span></div>
+<div class="ln"><span class="pr">$</span> <span class="cmd">clickcron remove</span> <span class="dim">&lt;name&gt; [--runs]</span></div>
+<div class="ln"><span class="pr">$</span> <span class="cmd">clickcron export</span> <span class="dim">&lt;name&gt; [--format json|yaml]</span></div>
+        </div>
+      </div>
+      <div class="grid grid-2" style="margin-top:24px">
+        <div class="card">
+          <h3>Schedule with aliases or raw cron</h3>
+          <p style="margin-bottom:12px">Use a friendly alias or a 5-field cron expression — ClickCron handles the rest.</p>
+          <div class="term-body mono" style="padding:0;font-size:13.5px">
+<div class="ln"><span class="pr">$</span> <span class="cmd">clickcron schedule price-checker hourly</span></div>
+<div class="ln"><span class="pr">$</span> <span class="cmd">clickcron schedule price-checker "0 9 * * *"</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Quickstart in four lines</h3>
+          <p style="margin-bottom:12px">Clone, install, build, and you're recording flows.</p>
+          <div class="term-body mono" style="padding:0;font-size:13.5px">
+<div class="ln"><span class="pr">$</span> <span class="cmd">npm ci</span></div>
+<div class="ln"><span class="pr">$</span> <span class="cmd">npm run build</span></div>
+<div class="ln"><span class="pr">$</span> <span class="cmd">node dist/cli.js init</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="examples" style="background:var(--bg-soft); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker">Examples</span>
+        <h2>Ready-made recipes to copy</h2>
+        <p>Start from a working example and adapt it to your own pages.</p>
+      </div>
+      <div class="grid grid-2" style="margin-top:36px">
+        <a class="card" href="https://github.com/vijay-kapse/ClickCron/tree/main/examples/price-checker" target="_blank" rel="noopener"><h3>💲 Price checker →</h3><p>Track a price and fail the run when it crosses your threshold.</p></a>
+        <a class="card" href="https://github.com/vijay-kapse/ClickCron/tree/main/examples/screenshot-monitor" target="_blank" rel="noopener"><h3>📸 Screenshot monitor →</h3><p>Capture a page on a schedule and keep a visual history.</p></a>
+        <a class="card" href="https://github.com/vijay-kapse/ClickCron/tree/main/examples/form-checker" target="_blank" rel="noopener"><h3>🧪 Form checker →</h3><p>Smoke-test a critical form end to end after every deploy.</p></a>
+        <a class="card" href="https://github.com/vijay-kapse/ClickCron/tree/main/examples/job-board-monitor" target="_blank" rel="noopener"><h3>📋 Job board monitor →</h3><p>Watch a board for new listings and get audit-ready results.</p></a>
+      </div>
+      <div class="examples-img">
+        <img src="./assets/clickcron-examples.png" alt="ClickCron example recipes for price checks, screenshot monitors, form checks, and job boards" />
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="cta-band">
+        <span class="kicker">Get started</span>
+        <h2>Record your first check in minutes</h2>
+        <p>Open source, MIT licensed, and built to live right inside your repo. No accounts, no lock-in.</p>
+        <div class="cta-row" style="justify-content:center">
+          <a class="btn btn-primary" href="https://github.com/vijay-kapse/ClickCron" target="_blank" rel="noopener">★ View on GitHub</a>
+          <a class="btn btn-ghost" href="https://github.com/vijay-kapse/ClickCron#quickstart" target="_blank" rel="noopener">Read the quickstart</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot-inner">
+    <div class="brand"><span class="dot"></span> ClickCron · <span style="color:var(--muted);font-weight:400">Record once. Run forever.</span></div>
+    <div class="foot-links">
+      <a href="https://github.com/vijay-kapse/ClickCron" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/vijay-kapse/ClickCron/issues" target="_blank" rel="noopener">Issues</a>
+      <a href="https://github.com/vijay-kapse/ClickCron/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
