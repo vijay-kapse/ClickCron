@@ -1,0 +1,11 @@
+# Normalize all text files to LF in the working tree on every OS so that
+# `prettier --check` passes consistently (notably on Windows CI runners).
+* text=auto eol=lf
+
+# Binary assets must never be normalized.
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary

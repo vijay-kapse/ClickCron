@@ -4,7 +4,6 @@
 
 [![CI](https://github.com/vijay-kapse/ClickCron/actions/workflows/ci.yml/badge.svg)](https://github.com/vijay-kapse/ClickCron/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/clickcron?color=0bbf87&label=npm)](https://www.npmjs.com/package/clickcron)
-[![npm downloads](https://img.shields.io/npm/dm/clickcron?color=14e3a3)](https://www.npmjs.com/package/clickcron)
 ![Node](https://img.shields.io/badge/node-%3E%3D20-111318)
 ![TypeScript](https://img.shields.io/badge/TypeScript-ready-3178c6)
 ![License](https://img.shields.io/badge/license-MIT-0bbf87)
