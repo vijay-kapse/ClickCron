@@ -118,7 +118,6 @@ More detail: [docs/secrets.md](./docs/secrets.md).
   <img src="./docs/assets/clickcron-examples.png" alt="ClickCron example recipes for price checks, screenshot monitors, form checks, and job boards" width="100%">
 </p>
 
-
 ## Roadmap
 
 - next-run previews for schedules

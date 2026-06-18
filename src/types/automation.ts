@@ -1,3 +1,5 @@
+import type { SelectorCandidate } from './heal.js';
+
 export interface AutomationMetadata {
   name: string;
   displayName: string;
@@ -8,6 +10,8 @@ export interface AutomationMetadata {
   sourceUrl?: string;
   browser: 'chromium' | 'firefox' | 'webkit';
   timeoutMs: number;
+  /** Selector candidates captured at record time, keyed by candidate key. */
+  selectors?: Record<string, SelectorCandidate>;
 }
 
 export interface CreateAutomationInput {
@@ -15,4 +19,5 @@ export interface CreateAutomationInput {
   browser: 'chromium' | 'firefox' | 'webkit';
   timeoutMs: number;
   sourceUrl?: string;
+  selectors?: Record<string, SelectorCandidate>;
 }

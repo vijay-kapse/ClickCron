@@ -2,6 +2,7 @@ import { mkdir, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises'
 import path from 'node:path';
 import type { ClickCronConfig } from '../types/config.js';
 import type { AutomationMetadata, CreateAutomationInput } from '../types/automation.js';
+import type { HealEvent } from '../types/heal.js';
 import { CliError } from './errors.js';
 
 function slugify(name: string): string {
@@ -36,10 +37,46 @@ export async function writeAutomationMetadata(
     timeoutMs: input.timeoutMs
   };
   if (input.sourceUrl !== undefined) metadata.sourceUrl = input.sourceUrl;
+  if (input.selectors !== undefined) metadata.selectors = input.selectors;
 
   await mkdir(config.paths.automations, { recursive: true });
   await writeFile(metadataPath, `${JSON.stringify(metadata, null, 2)}\n`, 'utf8');
   return metadata;
+}
+
+/**
+ * Persist healed selectors back into an automation's metadata so the next run
+ * starts from the repaired strategy. The healed strategy is promoted to the
+ * front of the candidate's strategy list, with prior strategies kept as
+ * fallbacks.
+ */
+export async function applyHealsToMetadata(
+  config: ClickCronConfig,
+  name: string,
+  heals: HealEvent[]
+): Promise<AutomationMetadata> {
+  const { metadataPath } = getAutomationPaths(config, name);
+  const metadata = await readAutomationMetadata(metadataPath);
+  const selectors = { ...(metadata.selectors ?? {}) };
+
+  for (const heal of heals) {
+    const existing = selectors[heal.key];
+    const fallbacks = existing ? existing.strategies : heal.before;
+    const deduped = fallbacks.filter((s) => JSON.stringify(s) !== JSON.stringify(heal.after));
+    selectors[heal.key] = {
+      key: heal.key,
+      ...(heal.description !== undefined ? { description: heal.description } : {}),
+      strategies: [heal.after, ...deduped]
+    };
+  }
+
+  const updated: AutomationMetadata = {
+    ...metadata,
+    selectors,
+    updatedAt: new Date().toISOString()
+  };
+  await writeFile(metadataPath, `${JSON.stringify(updated, null, 2)}\n`, 'utf8');
+  return updated;
 }
 
 export async function readAutomationMetadata(metadataPath: string): Promise<AutomationMetadata> {

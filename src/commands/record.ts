@@ -30,8 +30,19 @@ export function registerRecordCommand(program: Command): void {
         };
         if (url !== undefined) recordOptions.url = url;
 
-        await recordAutomation(config, recordOptions);
+        const result = await recordAutomation(config, recordOptions);
         logSuccess(`Recorded automation "${name}".`);
+        if (result.healableSelectors > 0) {
+          logInfo(
+            `Captured ${result.healableSelectors} self-healing selector(s). ` +
+              'They will auto-repair if the page changes.'
+          );
+        } else {
+          logInfo(
+            'No selectors were auto-converted. The spec runs as-is; wrap locators with ' +
+              '`cc(page, …)` from `clickcron/runtime` to enable self-healing.'
+          );
+        }
       } catch (error) {
         logInfo(`Recording failed for "${name}".`);
         logError(error);
