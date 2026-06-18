@@ -7,6 +7,8 @@ Record once. Run forever.
 ![TypeScript](https://img.shields.io/badge/TypeScript-ready-3178c6)
 ![License](https://img.shields.io/badge/license-MIT-0bbf87)
 
+**🌐 Landing page: [clickcron.vercel.app](https://clickcron.vercel.app)**
+
 ClickCron is a TypeScript CLI for turning browser clicks into scheduled Playwright checks. Record a flow, run it locally or in CI, and keep logs, screenshots, and JSON results for every run.
 
 <p align="center">
