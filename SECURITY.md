@@ -9,7 +9,7 @@
 
 ## Reporting a Vulnerability
 
-Please report security issues privately to **tworockranch@gmail.com**. Do not open a public
+Please report security issues privately to **vijayskofficial@gmail.com**. Do not open a public
 issue for anything that could put users at risk. We aim to acknowledge reports within 72 hours
 and will keep you updated as we work on a fix.
 
