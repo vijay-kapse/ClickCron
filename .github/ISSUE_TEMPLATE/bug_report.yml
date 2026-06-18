@@ -1,0 +1,58 @@
+name: Bug report
+description: Report a problem with ClickCron
+labels: ['bug']
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear description of the bug and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: The commands you ran and, if possible, a minimal recipe or page.
+      placeholder: |
+        1. clickcron record ...
+        2. clickcron run ...
+        3. ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: ClickCron version
+      description: Output of `clickcron --version`.
+    validations:
+      required: true
+  - type: input
+    id: node
+    attributes:
+      label: Node version
+      description: Output of `node --version`.
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - macOS
+        - Linux
+        - Windows
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: healing
+    attributes:
+      label: Was AI self-healing involved?
+      options:
+        - 'No'
+        - 'Yes — healing produced a wrong selector'
+        - 'Yes — healing failed to repair'
+        - 'Not sure'
+    validations:
+      required: false

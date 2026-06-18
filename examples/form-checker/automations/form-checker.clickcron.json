@@ -1,0 +1,49 @@
+{
+  "name": "form-checker",
+  "displayName": "Form Checker",
+  "scriptPath": "automations/form-checker.spec.ts",
+  "metadataPath": "automations/form-checker.clickcron.json",
+  "createdAt": "2026-06-18T00:00:00.000Z",
+  "updatedAt": "2026-06-18T00:00:00.000Z",
+  "sourceUrl": "https://example.com/contact",
+  "browser": "chromium",
+  "timeoutMs": 30000,
+  "selectors": {
+    "name-field": {
+      "key": "name-field",
+      "description": "The full name input on the contact form",
+      "strategies": [
+        { "kind": "label", "value": "Name" },
+        { "kind": "placeholder", "value": "Your name" },
+        { "kind": "css", "value": "input[name=\"name\"]" }
+      ]
+    },
+    "email-field": {
+      "key": "email-field",
+      "description": "The email address input on the contact form",
+      "strategies": [
+        { "kind": "label", "value": "Email" },
+        { "kind": "placeholder", "value": "you@example.com" },
+        { "kind": "css", "value": "input[type=\"email\"]" }
+      ]
+    },
+    "submit-button": {
+      "key": "submit-button",
+      "description": "The submit / send button at the bottom of the form",
+      "strategies": [
+        { "kind": "role", "value": "button", "name": "Send" },
+        { "kind": "role", "value": "button", "name": "Submit" },
+        { "kind": "css", "value": "button[type=\"submit\"]" }
+      ]
+    },
+    "success-message": {
+      "key": "success-message",
+      "description": "The confirmation message shown after a successful submission",
+      "strategies": [
+        { "kind": "text", "value": "Thank you" },
+        { "kind": "testId", "value": "form-success" },
+        { "kind": "role", "value": "status" }
+      ]
+    }
+  }
+}

@@ -59,3 +59,19 @@ clickcron schedule screenshot-monitor hourly
 - run log
 - `result.json`
 - optional GitHub Actions artifact upload for scheduled runs
+
+## Run it locally
+
+This folder ships a ready-to-run starter under `automations/`. Copy the folder, then run:
+
+```bash
+npx clickcron run screenshot-monitor
+```
+
+Selectors self-heal automatically when `ANTHROPIC_API_KEY` is set: if the recorded
+strategies stop matching, ClickCron asks Claude to relocate the element, verifies the
+repair, and continues. To proactively repair selectors before a scheduled run:
+
+```bash
+npx clickcron heal screenshot-monitor
+```
