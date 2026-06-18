@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0
+
+### Minor Changes
+
+- [`6c5aadc`](https://github.com/vijay-kapse/ClickCron/commit/6c5aadc656a7d88b6a41ae18750ddccfb1e4047f) Thanks [@tworockranch-cmd](https://github.com/tworockranch-cmd)! - Add AI self-healing selectors: when a recorded selector stops matching, Claude relocates the element from the live page, the repaired selector is verified before use, persisted back to the recipe, and logged as a heal event. Ships the new `clickcron/runtime` entrypoint, a `heal` command to re-validate and repair a recipe on demand, real `export` plus `--dry-run` for `run`, and a `doctor` that reports healing readiness.
+
 All notable changes to this project are documented here. The format is based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).

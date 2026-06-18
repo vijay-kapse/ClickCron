@@ -1,6 +1,6 @@
 {
   "name": "clickcron",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Record browser clicks once, run them forever as AI self-healing, scheduled Playwright checks.",
   "license": "MIT",
   "type": "module",
