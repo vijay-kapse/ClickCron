@@ -3,15 +3,15 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ClickCron — Record once. Run forever.</title>
+    <title>ClickCron — Browser checks that heal themselves with AI</title>
     <meta
       name="description"
-      content="ClickCron is a TypeScript CLI that turns browser clicks into scheduled Playwright checks. Record a flow, run it locally or in CI, and keep logs, screenshots, and JSON results for every run."
+      content="ClickCron records browser clicks and runs them as scheduled checks. When the page changes and a selector breaks, it repairs the selector with AI, verifies the fix, and keeps the check green."
     />
-    <meta property="og:title" content="ClickCron — Record once. Run forever." />
+    <meta property="og:title" content="ClickCron — Browser checks that heal themselves with AI" />
     <meta
       property="og:description"
-      content="Turn browser clicks into scheduled Playwright checks. Record a flow, run it anywhere, keep audit-ready artifacts."
+      content="Record browser clicks and run them as scheduled checks. When the page changes and a selector breaks, ClickCron repairs it with AI and keeps the check green."
     />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="./assets/clickcron-hero.png" />
@@ -480,13 +480,13 @@
                 display: inline-block;
               "
             ></span>
-            Playwright flows, scheduled like cron</span
+            AI self-healing browser checks</span
           >
-          <h1>Record once.<br /><span class="grad">Run forever.</span></h1>
+          <h1>Checks that <span class="grad">heal themselves.</span></h1>
           <p class="lede">
-            ClickCron is a TypeScript CLI that turns browser clicks into scheduled Playwright
-            checks. Record a flow, run it locally or in CI, and keep logs, screenshots, and JSON
-            results for every run.
+            ClickCron records browser clicks and runs them as scheduled checks. When the site
+            changes and a selector breaks, it repairs the selector with AI — verifies the fix, saves
+            it back, and keeps the check green. Record once. Run forever.
           </p>
           <div class="cta-row">
             <a
@@ -499,14 +499,14 @@
             <a class="btn btn-ghost" href="#how">See how it works →</a>
           </div>
           <div class="pillset">
-            <span class="pill"><b>CLI-first</b> · no dashboard required</span>
+            <span class="pill"><b>AI self-healing</b> selectors</span>
+            <span class="pill"><b>npx clickcron</b> · no dashboard</span>
             <span class="pill"><b>GitHub Actions</b> ready</span>
-            <span class="pill"><b>Screenshots</b> + audit-ready logs</span>
           </div>
           <div class="hero-img">
             <img
-              src="./assets/clickcron-hero.png"
-              alt="ClickCron CLI demo showing record, run, and schedule workflow"
+              src="./assets/clickcron-demo.svg"
+              alt="ClickCron self-healing run: a broken selector is repaired by AI and the check stays green"
             />
           </div>
         </div>
