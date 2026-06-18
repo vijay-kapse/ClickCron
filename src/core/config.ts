@@ -3,6 +3,8 @@ import { z } from 'zod';
 import type { ClickCronConfig } from '../types/config.js';
 import { resolveConfigFilePath, resolveDefaultPaths, resolveProjectRoot } from './paths.js';
 
+export const DEFAULT_HEAL_MODEL = 'claude-haiku-4-5';
+
 const clickCronConfigSchema = z.object({
   version: z.number().int().positive(),
   defaultBrowser: z.string().min(1),
@@ -13,7 +15,14 @@ const clickCronConfigSchema = z.object({
     runs: z.string().min(1),
     screenshots: z.string().min(1),
     storage: z.string().min(1)
-  })
+  }),
+  heal: z
+    .object({
+      enabled: z.boolean(),
+      model: z.string().min(1),
+      maxHealsPerRun: z.number().int().nonnegative()
+    })
+    .default({ enabled: true, model: DEFAULT_HEAL_MODEL, maxHealsPerRun: 5 })
 });
 
 export type ClickCronConfigInput = z.input<typeof clickCronConfigSchema>;
@@ -26,7 +35,8 @@ export function createDefaultConfig(cwd?: string): ClickCronConfig {
     defaultBrowser: 'chromium',
     headless: true,
     timeoutMs: 30000,
-    paths: resolveDefaultPaths(projectDir)
+    paths: resolveDefaultPaths(projectDir),
+    heal: { enabled: true, model: DEFAULT_HEAL_MODEL, maxHealsPerRun: 5 }
   };
 }
 

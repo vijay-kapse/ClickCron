@@ -9,11 +9,12 @@ export interface ProcessResult {
 export async function execa(
   command: string,
   args: string[],
-  options?: { stdio?: 'inherit'; reject?: boolean }
+  options?: { stdio?: 'inherit'; reject?: boolean; env?: NodeJS.ProcessEnv }
 ): Promise<ProcessResult> {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, {
-      stdio: options?.stdio === 'inherit' ? 'inherit' : 'pipe'
+      stdio: options?.stdio === 'inherit' ? 'inherit' : 'pipe',
+      ...(options?.env ? { env: { ...process.env, ...options.env } } : {})
     });
 
     let stdout = '';

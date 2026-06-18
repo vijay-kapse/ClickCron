@@ -1,7 +1,7 @@
 {
   "name": "clickcron",
-  "version": "0.1.0",
-  "description": "A TypeScript-based CLI for click-driven monitoring and scheduled checks.",
+  "version": "0.2.0",
+  "description": "Record browser clicks once, run them forever as AI self-healing, scheduled Playwright checks.",
   "license": "MIT",
   "type": "module",
   "author": "Vijay Kapse",
@@ -25,6 +25,16 @@
   "bin": {
     "clickcron": "dist/cli.js"
   },
+  "exports": {
+    ".": {
+      "types": "./dist/cli.d.ts",
+      "import": "./dist/cli.js"
+    },
+    "./runtime": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
   "engines": {
     "node": ">=20"
   },
@@ -32,10 +42,13 @@
     "dev": "tsx src/cli.ts",
     "build": "tsup",
     "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "lint": "eslint .",
     "format": "prettier --check .",
+    "format:write": "prettier --write .",
     "typecheck": "tsc --noEmit",
-    "verify": "npm run typecheck && npm run lint && npm test && npm run build",
+    "verify": "npm run typecheck && npm run lint && npm run format && npm test && npm run build",
     "assets": "node scripts/render-readme-assets.mjs",
     "prepack": "npm run build"
   },
@@ -51,16 +64,30 @@
     "@types/node": "^22.14.0",
     "@typescript-eslint/eslint-plugin": "^8.41.0",
     "@typescript-eslint/parser": "^8.41.0",
+    "@vitest/coverage-v8": "^4.1.9",
     "eslint": "^9.34.0",
     "eslint-config-prettier": "^10.1.8",
     "prettier": "^3.6.2",
     "tsup": "^8.5.0",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2",
-    "vitest": "^3.2.4"
+    "vitest": "^4.1.9"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.104.2",
     "commander": "^12.1.0",
+    "picocolors": "^1.1.1",
     "zod": "^3.24.1"
+  },
+  "peerDependencies": {
+    "@playwright/test": ">=1.40.0"
+  },
+  "peerDependenciesMeta": {
+    "@playwright/test": {
+      "optional": true
+    }
+  },
+  "overrides": {
+    "esbuild": ">=0.28.1"
   }
 }

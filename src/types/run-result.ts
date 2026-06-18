@@ -1,3 +1,5 @@
+import type { HealEvent } from './heal.js';
+
 export interface RunResult {
   name: string;
   success: boolean;
@@ -10,4 +12,6 @@ export interface RunResult {
   logPath: string;
   resultPath: string;
   screenshotPath: string;
+  /** Selectors that broke during this run and were repaired by AI. */
+  heals: HealEvent[];
 }
