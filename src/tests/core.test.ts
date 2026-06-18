@@ -14,7 +14,8 @@ describe('config validation/default generation', () => {
   it('creates default config rooted in cwd', () => {
     const config = createDefaultConfig('/tmp/project');
     expect(config.version).toBe(1);
-    expect(config.paths.automations).toContain('/tmp/project/automations');
+    // Platform-agnostic: resolveDefaultPaths joins path.resolve(cwd) + 'automations'.
+    expect(config.paths.automations).toBe(path.join(path.resolve('/tmp/project'), 'automations'));
   });
 
   it('validates valid config and rejects invalid timeout', () => {
