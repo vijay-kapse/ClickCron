@@ -1,0 +1,31 @@
+{
+  "name": "price-checker",
+  "displayName": "Price Checker",
+  "scriptPath": "automations/price-checker.spec.ts",
+  "metadataPath": "automations/price-checker.clickcron.json",
+  "createdAt": "2026-06-18T00:00:00.000Z",
+  "updatedAt": "2026-06-18T00:00:00.000Z",
+  "sourceUrl": "https://example.com/products/widget",
+  "browser": "chromium",
+  "timeoutMs": 30000,
+  "selectors": {
+    "product-title": {
+      "key": "product-title",
+      "description": "The product name heading at the top of the page",
+      "strategies": [
+        { "kind": "role", "value": "heading", "name": "Widget" },
+        { "kind": "testId", "value": "product-title" },
+        { "kind": "css", "value": "h1" }
+      ]
+    },
+    "product-price": {
+      "key": "product-price",
+      "description": "The current product price, shown near the buy button",
+      "strategies": [
+        { "kind": "testId", "value": "product-price" },
+        { "kind": "css", "value": "[data-price]" },
+        { "kind": "text", "value": "$" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "screenshot-monitor",
+  "displayName": "Screenshot Monitor",
+  "scriptPath": "automations/screenshot-monitor.spec.ts",
+  "metadataPath": "automations/screenshot-monitor.clickcron.json",
+  "createdAt": "2026-06-18T00:00:00.000Z",
+  "updatedAt": "2026-06-18T00:00:00.000Z",
+  "sourceUrl": "https://example.com",
+  "browser": "chromium",
+  "timeoutMs": 30000,
+  "selectors": {
+    "hero-heading": {
+      "key": "hero-heading",
+      "description": "The primary above-the-fold heading on the landing page",
+      "strategies": [
+        { "kind": "role", "value": "heading", "name": "Example Domain" },
+        { "kind": "testId", "value": "hero-heading" },
+        { "kind": "css", "value": "main h1" }
+      ]
+    }
+  }
+}

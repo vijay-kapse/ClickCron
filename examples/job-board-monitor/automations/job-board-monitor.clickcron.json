@@ -1,0 +1,31 @@
+{
+  "name": "job-board-monitor",
+  "displayName": "Job Board Monitor",
+  "scriptPath": "automations/job-board-monitor.spec.ts",
+  "metadataPath": "automations/job-board-monitor.clickcron.json",
+  "createdAt": "2026-06-18T00:00:00.000Z",
+  "updatedAt": "2026-06-18T00:00:00.000Z",
+  "sourceUrl": "https://example.com/careers",
+  "browser": "chromium",
+  "timeoutMs": 30000,
+  "selectors": {
+    "job-list": {
+      "key": "job-list",
+      "description": "The container that holds the rendered job listings",
+      "strategies": [
+        { "kind": "testId", "value": "job-list" },
+        { "kind": "role", "value": "list" },
+        { "kind": "css", "value": "main ul, main ol" }
+      ]
+    },
+    "first-job": {
+      "key": "first-job",
+      "description": "The first job listing row in the results",
+      "strategies": [
+        { "kind": "testId", "value": "job-item" },
+        { "kind": "role", "value": "listitem" },
+        { "kind": "css", "value": "main li" }
+      ]
+    }
+  }
+}
